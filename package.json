@@ -1,0 +1,27 @@
+{
+  "name": "jws-fp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "lint": "eslint src/"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@mft/eslint-config-momentumft": "^3.1.5",
+    "ecdsa-sig-formatter": "^1.0.9",
+    "eslint": "^4.16.0",
+    "eslint-plugin-fp": "^2.3.0",
+    "jest": "^22.2.1",
+    "jwk-to-pem": "^1.2.6"
+  },
+  "eslintConfig": {
+    "extends": "@mft/eslint-config-momentumft/fp"
+  },
+  "dependencies": {
+    "pem-jwk": "^1.5.1"
+  }
+}

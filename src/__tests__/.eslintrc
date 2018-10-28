@@ -1,0 +1,10 @@
+{
+  "rules": {
+    "fp/no-unused-expression": "off",
+    "sort-keys": "off",
+    "no-magic-numbers": "off"
+  },
+  "env": {
+    "jest": true
+  }
+}

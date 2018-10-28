@@ -1,0 +1,7 @@
+{
+  "extends": "@mft/eslint-config-momentumft/fp",
+  "rules": {
+    "fp/no-throw": 0,
+    "fp/no-nil": 0
+  }
+}
