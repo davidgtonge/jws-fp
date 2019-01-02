@@ -2,23 +2,23 @@
 
 _ALPHA Project - don't use in production yet_
 
-The JOSE suite of standards: JWA, JWS & JWT are gaining widespread adoption. There are quite a few JavaScript libraries that implement the specs so why write another one?
+The JOSE suite of standards: JWA, JWK, JWS & JWT are gaining widespread adoption. There are quite a few JavaScript libraries that implement the specs so why write another one?
 
 This library has these aims:
 
-- Zero dependencies (Node.JS only)
+- Minimal dependencies (Node.JS only)
 - Strict adherence to standards
 - Useful error messages with links
 - Minimal functional coding style
 - Simple to use API with access to each layer
 
-### Zero Dependencies
+### Minimal Dependencies
 
-The heavy lifting of signing and verifying payloads is provided by the standard Node.JS crypto module. It is therefore possible to provide a lightweight, standards compliant library that uses zero dependencies.
+The heavy lifting of signing and verifying payloads is provided by the standard Node.JS crypto module. It is therefore possible to provide a lightweight, standards compliant library that uses very few dependencies.
+
+Initially I wanted to create this module with zero dependencies, however I've had to include [asn1.js](https://github.com/indutny/asn1.js/) from Fedor Indutny to handle conversions.
 
 Given that creating and verifying signatures is a critical, high value, part of any secure system I thinnk it is worth considering how to reduce dependencies in this area and therefore reduce the risk of an attacker compromising a system by gaining access to an open source NPM module.
-
-Paranoid developers could even copy the source code for this library and include it directly in their source code.
 
 ### Strict adherence to standards
 
@@ -37,14 +37,14 @@ While not a hard rule, there is evidence that lines of code correlates with numb
 Creates a spec-compliant JWT.
 
 ```js
-const { jwt } = require("simple-jose")
+const {jwt} = require("simple-jose")
 const symetricToken = jwt.sign({
-  payload: { foo: "bar" },
+  payload: {foo: "bar"},
   alg: "HS256",
   secret: "my cryptographically random secret",
 })
 const asymetricToken = jwt.sign({
-  payload: { foo: "bar" },
+  payload: {foo: "bar"},
   alg: "PS256",
   kid: "key id",
   key: fs.readFileSync("./my-private-key"),
@@ -67,7 +67,7 @@ Accepts the following options:
 Verifies a JWT.
 
 ```js
-const { jwt } = require("simple-jose")
+const {jwt} = require("simple-jose")
 const verifiedTokenPayload = jwt.verify({
   token: "ey....",
   alg: "HS256",
@@ -99,8 +99,8 @@ This is possible and often recommended as well:
 ```js
 const JWT = require("simple-jwt")
 
-const verifyFactory = ({ iss, aud, alg, keys }) => token =>
-  JWT.verify({ iss, aud, alg, keys, token })
+const verifyFactory = ({iss, aud, alg, keys}) => token =>
+  JWT.verify({iss, aud, alg, keys, token})
 ```
 
 ### Integration to a JWKS endpoint
@@ -113,9 +113,6 @@ const jwks = jwksCache({
 })
 
 const key = await jwks.get("some-kid")
-
-
-
 ```
 
 Todo:
@@ -123,4 +120,5 @@ Todo:
 - tests
 - add support for interop tests
 - get list of test vectors
--
+- add support for private key conversion
+- add support for compressed keys

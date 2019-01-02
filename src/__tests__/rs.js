@@ -1,16 +1,22 @@
-const fs = require("fs")
-const path = require("path")
 const crypto = require("crypto")
 const rsa = require("../asymetric-rs")
-const privateKey = fs
-  .readFileSync(path.join(__dirname, "./keys/private-rs.pem"))
-  .toString()
-const publicKey = fs
-  .readFileSync(path.join(__dirname, "./keys/public-rs.pem"))
-  .toString()
-const publicKey2 = fs
-  .readFileSync(path.join(__dirname, "./keys/public2-rs.pem"))
-  .toString()
+
+const createKey = size =>
+  crypto.generateKeyPairSync("rsa", {
+    modulusLength: size,
+    publicKeyEncoding: {
+      type: "spki",
+      format: "pem",
+    },
+    privateKeyEncoding: {
+      type: "pkcs8",
+      format: "pem",
+    },
+  })
+
+const key1 = createKey(2048)
+const key2 = createKey(2048)
+
 const specs = [
   "foobar",
   crypto.randomBytes(64).toString("base64"),
@@ -25,9 +31,11 @@ algs.forEach(alg => {
     test(`rsa: ${alg} ${input}`, () => {
       const type = alg.substr(0, 2)
       const length = +alg.substr(2)
-      const actual = rsa(length, type).sign(input, privateKey)
-      expect(rsa(length, type).verify(input, actual, publicKey)).toBe(true)
-      expect(rsa(length, type).verify(input, actual, publicKey2)).toBe(false)
+      const actual = rsa(length, type).sign(input, key1.privateKey)
+      expect(rsa(length, type).verify(input, actual, key1.publicKey)).toBe(true)
+      expect(rsa(length, type).verify(input, actual, key2.publicKey)).toBe(
+        false
+      )
     })
   })
 })

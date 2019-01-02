@@ -1,5 +1,6 @@
 const crypto = require("crypto")
 const {urlEncode} = require("./base64url")
+const jwk = require("./jwk")
 
 const PADDING = {
   PS: crypto.constants.RSA_PKCS1_PSS_PADDING,
@@ -16,11 +17,14 @@ const sign = (length, type) => (string, privateKey) =>
       .sign(getKey(type, privateKey), "base64")
   )
 
-const verify = (length, type) => (string, sig, publicKey) =>
-  crypto
+const verify = (length, type) => (string, sig, publicKey) => {
+  const key = jwk.isJWK(publicKey) ? jwk.rs.fromJWK(publicKey) : publicKey
+
+  return crypto
     .createVerify("SHA" + length)
     .update(string)
-    .verify(getKey(type, publicKey), sig, "base64")
+    .verify(getKey(type, key), sig, "base64")
+}
 
 module.exports = (length, type) => ({
   sign: sign(length, type),

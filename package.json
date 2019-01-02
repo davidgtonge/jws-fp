@@ -16,12 +16,16 @@
     "eslint": "^4.16.0",
     "eslint-plugin-fp": "^2.3.0",
     "jest": "^22.2.1",
-    "jwk-to-pem": "^1.2.6"
+    "jwk-to-pem": "^1.2.6",
+    "pem-jwk": "^1.5.1"
   },
   "eslintConfig": {
-    "extends": "@mft/eslint-config-momentumft/fp"
+    "extends": "@mft/eslint-config-momentumft/fp",
+    "rules": {
+      "sort-keys": 0
+    }
   },
   "dependencies": {
-    "pem-jwk": "^1.5.1"
+    "js-crypto-key-utils": "^0.4.6"
   }
 }

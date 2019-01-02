@@ -1,4 +1,5 @@
 /* eslint no-magic-numbers: 0 */
+const es = require("./asymetric-es")
 const rs = require("./asymetric-rs")
 const hs = require("./symetric")
 const {
@@ -7,6 +8,9 @@ const {
 } = require("./errors")
 
 const algs = {
+  ES256: es(256, "ES256"),
+  ES384: es(384, "ES384"),
+  ES512: es(512, "ES512"),
   HS256: hs(256),
   HS384: hs(384),
   HS512: hs(512),

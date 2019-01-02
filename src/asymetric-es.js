@@ -1,21 +1,25 @@
 const crypto = require("crypto")
-const {toJose, fromJose} = require("./es-jose-sig")
+const {derToJose, joseToDer} = require("./asn1/es-sig-conversion")
+const jwk = require("./jwk")
 
-const getLength = alg => alg.substr(2)
-
-const sign = alg => (string, privateKey) =>
-  toJose(
+const sign = (length, alg) => (string, privateKey) =>
+  derToJose(
     crypto
-      .createSign("SHA" + getLength(alg))
+      .createSign("SHA" + length)
       .update(string)
       .sign(privateKey),
     alg
   )
 
-const verify = alg => (string, sig, publicKey) =>
-  crypto
-    .createVerify("SHA" + getLength(alg))
+const verify = length => (string, sig, publicKey) => {
+  const key = jwk.isJWK(publicKey) ? jwk.es.fromJWK(publicKey) : publicKey
+  return crypto
+    .createVerify("SHA" + length)
     .update(string)
-    .verify(publicKey, fromJose(sig, alg))
+    .verify(key, joseToDer(sig))
+}
 
-module.exports = {sign, verify}
+module.exports = (length, alg) => ({
+  sign: sign(length, alg),
+  verify: verify(length),
+})
