@@ -122,3 +122,6 @@ Todo:
 - get list of test vectors
 - add support for private key conversion
 - add support for compressed keys
+- add support for x5c
+- add support for kid generation
+- jwe
